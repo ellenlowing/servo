@@ -5,8 +5,8 @@
 
 #define numServos 16
 #define servoPin 7
-#define numCases 3
-#define SERVOMIN  200 
+#define numCases 7
+#define SERVOMIN  200
 #define SERVOMAX  500 
 
 Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
@@ -62,6 +62,7 @@ void loop() {
 
 }
 
+/*** Update position values to servos. ***/
 void controlServos(){
   // Control for servo attached to digital pins
   servoo_val = map(vals[servoPin], 200, 500, 1, 180);
@@ -86,6 +87,7 @@ void controlServos(){
   } 
 }
 
+/*** Huge switch statement with each case being one unique time-based animation***/
 uint16_t switchFunc(uint8_t servonum, int currentFunc){
   uint16_t pos;
   switch(currentFunc){
@@ -140,15 +142,14 @@ uint16_t switchFunc(uint8_t servonum, int currentFunc){
   return pos;
 }
 
-uint16_t smoothing(uint8_t index, uint8_t newVal){
-  uint8_t current = vals[index];
-  
-}
+//uint16_t smoothing(uint8_t index, uint8_t newVal){
+//  uint8_t current = vals[index];
+//  
+//}
 
-// currentFunc is the function number of next animation
+/*** Give servos small amount of time to get ready for next position, in order to avoid big jumps between position values of different animations ***/
+// Here, currentFunc stands for the function number of next animation
 void interpolation(int currentFunc){
-  Serial.print("start interpolating");
-  
   delay(500);
   unsigned long initi = millis();
   bool updated[numServos];
@@ -171,13 +172,11 @@ void interpolation(int currentFunc){
     }
     controlServos();
   }
-  Serial.print("Finished interpolation  ");
   interpolateTime = millis() - initi;
-  Serial.println(String(millis() - initi));
 }
 
 
-/** Mathematical transformation functions **/
+/** Mathematical transformation (animation) functions **/
 
 // linear sine wave function
 // half wavelength
@@ -261,7 +260,7 @@ uint16_t bouncing (uint8_t index, char dir){
   return pos;
 }
 
-uint16_t circular_wave(uint8_t index){
-  
-}
+//uint16_t circular_wave(uint8_t index){
+//  
+//}
 
